@@ -1,0 +1,11 @@
+*.pyc
+*.csv
+*.xlsx
+*.pkl
+data/
+res/
+*.log
+*.png
+.ipynb_checkpoints/
+.vscode/
+.DS_Store
