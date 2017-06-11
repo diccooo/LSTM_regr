@@ -12,7 +12,9 @@ class Config(object):
     regular_lambda = 0
     log_interval = 100
     epoch = 2000
-    scalemethod = 3
+    scalemethod = 2
+    proc_col_num = 1300
+    var_ascending = False
     re_data = False
     re_train = True
 
