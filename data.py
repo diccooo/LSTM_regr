@@ -60,15 +60,37 @@ class PreData(object):
             return res
 
     def pre_data(self):
+        print('reading data...')
         df = pd.read_csv('./dataset/data.csv', index_col=0, header=[0,1])
-        df = df.iloc[:, :self.colnum * 2]
+        print('reading done')
+        df = df.iloc[:, :Config.proc_col_num*2]
         df_scaled = self.scale(df, Config.scalemethod)
+        # sorting with var ----------------------------------------------------
+        msk = [i * 2 for i in range(Config.proc_col_num)]
+        df_tmp = df_scaled.iloc[:, msk]
+        tmplist0 = [i * 48 + 47 for i in range(self.idx_t - 1)]
+        tmplist1 = [i + 48 for i in tmplist0]
+        df_tmp = df_tmp.values[tmplist1] - df_tmp.values[tmplist0]
+        df_tmp = pd.DataFrame(df_tmp)
+        df_dif_var = pd.Series(Config.proc_col_num)
+        for i in range(Config.proc_col_num):
+            df_dif_var[i] = df_tmp.iloc[:,i].values.var()
+        df_dif_var.sort_values(ascending=Config.var_ascending, inplace=True, kind='mergesort')
+        idxlist = df_dif_var.index.tolist()
+        idxlist1 = [x * 2 for x in idxlist]
+        idxlist2 = [x + 1 for x in idxlist1]
+        idxlist = [x for cp in zip(idxlist1, idxlist2) for x in cp]
+        idxlist = idxlist[:Config.colnum*2]
+        df_scaled = df_scaled.iloc[:, idxlist]
+        df = df.iloc[:, idxlist]
+        # sorting with var ----------------------------------------------------
         xlist, ylist0, ylist1 = self.xy_idx()
         xdata = df_scaled.values[xlist]
         ydata = df.values[ylist1] - df.values[ylist0]
         # ydata = df_scaled.values[ylist1] - df_scaled.values[ylist0]
         msk = [i * 2 for i in range(self.colnum)]
         ydata = ydata[:, msk]
+        print('processing done')
         return torch.from_numpy(xdata), torch.from_numpy(ydata)
 
 class Data(object):
@@ -97,6 +119,7 @@ def savedata():
     data = PreData()
     torch.save(data.x, Config.xpath)
     torch.save(data.y, Config.ypath)
+    print('saving done')
 
 def test():
     data = Data()
