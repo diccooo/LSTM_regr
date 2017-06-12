@@ -65,7 +65,7 @@ class PreData(object):
         print('reading done')
         df = df.iloc[:, :Config.proc_col_num*2]
         df_scaled = self.scale(df, Config.scalemethod)
-        # sorting with var ----------------------------------------------------
+        # sorting by var ----------------------------------------------------
         msk = [i * 2 for i in range(Config.proc_col_num)]
         df_tmp = df_scaled.iloc[:, msk]
         tmplist0 = [i * 48 + 47 for i in range(self.idx_t - 1)]
@@ -83,7 +83,7 @@ class PreData(object):
         idxlist = idxlist[:Config.colnum*2]
         df_scaled = df_scaled.iloc[:, idxlist]
         df = df.iloc[:, idxlist]
-        # sorting with var ----------------------------------------------------
+        # sorting by var ----------------------------------------------------
         xlist, ylist0, ylist1 = self.xy_idx()
         xdata = df_scaled.values[xlist]
         ydata = df.values[ylist1] - df.values[ylist0]
