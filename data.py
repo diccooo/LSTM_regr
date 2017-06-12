@@ -76,12 +76,19 @@ class PreData(object):
         for i in range(Config.proc_col_num):
             df_dif_var[i] = df_tmp.iloc[:,i].values.var()
         df_dif_var.sort_values(ascending=Config.var_ascending, inplace=True, kind='mergesort')
+        # print(df_dif_var)
         idxlist = df_dif_var.index.tolist()
         idxlist1 = [x * 2 for x in idxlist]
         idxlist2 = [x + 1 for x in idxlist1]
         idxlist = [x for cp in zip(idxlist1, idxlist2) for x in cp]
         idxlist = idxlist[:Config.colnum*2]
         df_scaled = df_scaled.iloc[:, idxlist]
+        # msk = [i * 2 for i in range(Config.colnum)]
+        # df_tmp = df_scaled.iloc[:, msk]
+        # df_tmp = df_tmp.values[tmplist1] - df_tmp.values[tmplist0]
+        # df_tmp = pd.DataFrame(df_tmp)
+        # for i in range(Config.colnum):
+        #     print(df_tmp.iloc[:,i].values.var())
         df = df.iloc[:, idxlist]
         # sorting by var ----------------------------------------------------
         xlist, ylist0, ylist1 = self.xy_idx()

@@ -14,7 +14,7 @@ class Config(object):
     epoch = 2000
     scalemethod = 2
     proc_col_num = 1300
-    var_ascending = False
+    var_ascending = True
     re_data = False
     re_train = True
 
