@@ -121,6 +121,7 @@ def main():
             ax22 = ax21.twinx()
             ax22.plot(test_losslist, 'r')
             plt.savefig('output.png')
+            plt.clf()
             print(
                 '| test loss {:10.5f} | npratio {:5.2f}% | dif {:2.5f} |'.format(
                     test_loss, test_npratio*100, dif

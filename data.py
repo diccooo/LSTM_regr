@@ -65,16 +65,36 @@ class PreData(object):
         print('reading done')
         df = df.iloc[:, :Config.proc_col_num*2]
         df_scaled = self.scale(df, Config.scalemethod)
-        # sorting by var ----------------------------------------------------
-        msk = [i * 2 for i in range(Config.proc_col_num)]
-        df_tmp = df_scaled.iloc[:, msk]
-        tmplist0 = [i * 48 + 47 for i in range(self.idx_t - 1)]
-        tmplist1 = [i + 48 for i in tmplist0]
-        df_tmp = df_tmp.values[tmplist1] - df_tmp.values[tmplist0]
-        df_tmp = pd.DataFrame(df_tmp)
+        # # sorting by var 1----------------------------------------------------
+        # msk = [i * 2 for i in range(Config.proc_col_num)]
+        # df_tmp = df_scaled.iloc[:, msk]
+        # tmplist0 = [i * 48 + 47 for i in range(self.idx_t - 1)]
+        # tmplist1 = [i + 48 for i in tmplist0]
+        # df_tmp = df_tmp.values[tmplist1] - df_tmp.values[tmplist0]
+        # df_tmp = pd.DataFrame(df_tmp)
+        # df_dif_var = pd.Series(Config.proc_col_num)
+        # for i in range(Config.proc_col_num):
+        #     df_dif_var[i] = df_tmp.iloc[:,i].values.var()
+        # df_dif_var.sort_values(ascending=Config.var_ascending, inplace=True, kind='mergesort')
+        # # print(df_dif_var)
+        # idxlist = df_dif_var.index.tolist()
+        # idxlist1 = [x * 2 for x in idxlist]
+        # idxlist2 = [x + 1 for x in idxlist1]
+        # idxlist = [x for cp in zip(idxlist1, idxlist2) for x in cp]
+        # idxlist = idxlist[:Config.colnum*2]
+        # df_scaled = df_scaled.iloc[:, idxlist]
+        # # msk = [i * 2 for i in range(Config.colnum)]
+        # # df_tmp = df_scaled.iloc[:, msk]
+        # # df_tmp = df_tmp.values[tmplist1] - df_tmp.values[tmplist0]
+        # # df_tmp = pd.DataFrame(df_tmp)
+        # # for i in range(Config.colnum):
+        # #     print(df_tmp.iloc[:,i].values.var())
+        # df = df.iloc[:, idxlist]
+        # # sorting by var 1----------------------------------------------------
+        # sorting by var 2----------------------------------------------------
         df_dif_var = pd.Series(Config.proc_col_num)
         for i in range(Config.proc_col_num):
-            df_dif_var[i] = df_tmp.iloc[:,i].values.var()
+            df_dif_var[i] = df_scaled.iloc[:,i*2].values.var() * df_scaled.iloc[:,i*2+1].values.var()
         df_dif_var.sort_values(ascending=Config.var_ascending, inplace=True, kind='mergesort')
         # print(df_dif_var)
         idxlist = df_dif_var.index.tolist()
@@ -83,14 +103,10 @@ class PreData(object):
         idxlist = [x for cp in zip(idxlist1, idxlist2) for x in cp]
         idxlist = idxlist[:Config.colnum*2]
         df_scaled = df_scaled.iloc[:, idxlist]
-        # msk = [i * 2 for i in range(Config.colnum)]
-        # df_tmp = df_scaled.iloc[:, msk]
-        # df_tmp = df_tmp.values[tmplist1] - df_tmp.values[tmplist0]
-        # df_tmp = pd.DataFrame(df_tmp)
         # for i in range(Config.colnum):
-        #     print(df_tmp.iloc[:,i].values.var())
+        #     print(df_scaled.iloc[:,i*2].values.var() * df_scaled.iloc[:,i*2+1].values.var())
         df = df.iloc[:, idxlist]
-        # sorting by var ----------------------------------------------------
+        # sorting by var 2----------------------------------------------------
         xlist, ylist0, ylist1 = self.xy_idx()
         xdata = df_scaled.values[xlist]
         ydata = df.values[ylist1] - df.values[ylist0]

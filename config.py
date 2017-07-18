@@ -6,7 +6,7 @@ class Config(object):
     nout = colnum
     dropout = 0.5
     batsize = 1
-    nlayers = 6
+    nlayers = 5
     lr = 1
     clip = 0.5
     regular_lambda = 0
@@ -14,7 +14,7 @@ class Config(object):
     epoch = 2000
     scalemethod = 2
     proc_col_num = 1300
-    var_ascending = True
+    var_ascending = False
     re_data = False
     re_train = True
 
