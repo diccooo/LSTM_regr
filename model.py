@@ -39,10 +39,10 @@ from config import Config
 class Attn(nn.Module):
     def __init__(self):
         super(Attn, self).__init__()
-        self.attnlinear = nn.Linear(Config.nhidd, Config.nhidd)
+        # self.attnlinear = nn.Linear(Config.nhidd, Config.nhidd)
         self.tanh = nn.Tanh()
-        self.attnvec = nn.Parameter(torch.Tensor(1, Config.nhidd))
-        self.attnvec.data.uniform_(-0.1, 0.1)
+        # self.attnvec = nn.Parameter(torch.Tensor(1, Config.nhidd))
+        # self.attnvec.data.uniform_(-0.1, 0.1)
         self.attnsoftmax = nn.Softmax()
 
     def forward(self, input):
@@ -51,7 +51,8 @@ class Attn(nn.Module):
             attn_scores = attn_scores.cuda()
         for i in range(Config.batsize):
             for j in range(Config.nseries):
-                attn_scores[i, j] = self.attnvec.dot(self.tanh(self.attnlinear(input[i, j].unsqueeze(0))))
+                # attn_scores[i, j] = self.attnvec.dot(self.tanh(self.attnlinear(input[i, j].unsqueeze(0))))
+                attn_scores[i, j] = self.tanh(input[i, j].dot(input[i, j]))
         return self.attnsoftmax(attn_scores)
 
 class LSTMregrModel(nn.Module):

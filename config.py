@@ -6,7 +6,7 @@ class Config(object):
     nout = colnum
     dropout = 0.5
     batsize = 1
-    nlayers = 5
+    nlayers = 4
     lr = 1
     clip = 0.5
     regular_lambda = 0
